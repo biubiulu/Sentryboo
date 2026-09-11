@@ -9,6 +9,8 @@ struct AlertProblem: Identifiable, Equatable, Sendable {
     let startedAt: Date
     let url: URL?
     let acknowledged: Bool
+    let sourceID: String
+    let sourceName: String
 }
 
 enum AlertSeverity: Int, Comparable, CaseIterable, Sendable {
@@ -50,6 +52,7 @@ enum SourceStatus: Equatable {
     case idle
     case syncing
     case ok(count: Int)
+    case partial(okCount: Int, failedNames: [String])
     case error(String)
 }
 

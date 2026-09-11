@@ -3,7 +3,6 @@ import AppKit
 
 struct ContentView: View {
     @EnvironmentObject private var session: AlertSession
-    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -24,9 +23,14 @@ struct ContentView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Sentryboo")
                     .font(.headline)
-                Text(statusText)
-                    .font(.caption)
-                    .foregroundStyle(statusColor)
+                HStack(spacing: 6) {
+                    Text(statusText)
+                        .font(.caption)
+                        .foregroundStyle(statusColor)
+                    if showsRefreshPulse {
+                        BreathingDot()
+                    }
+                }
             }
             Spacer()
             if let last = session.lastSyncedAt {
@@ -41,19 +45,27 @@ struct ContentView: View {
     @ViewBuilder
     private var middle: some View {
         switch session.status {
-        case .idle:
+        case .idle where session.accounts.isEmpty:
             emptyState(
                 title: "尚未配置",
-                detail: "打开设置，填写 Zabbix URL 与 API Token。"
+                detail: "打开设置，添加至少一台 Zabbix（名称、URL、API Token）。"
             )
-        case .error(let message):
-            emptyState(title: "同步失败", detail: message)
-        case .syncing where session.problems.isEmpty:
+        case .idle:
+            // 已有账号但尚未出结果（静默首刷）：不误显示「尚未配置」。
             ProgressView("同步中…")
                 .frame(maxWidth: .infinity, minHeight: 120)
                 .padding()
+        case .error(let message):
+            emptyState(title: "同步失败", detail: message)
         case .ok where session.problems.isEmpty:
             emptyState(title: "暂无未恢复问题", detail: "当前过滤条件下一切正常。")
+        case .partial(_, _) where session.problems.isEmpty:
+            emptyState(title: "暂无未恢复问题", detail: statusText)
+        case .syncing where session.problems.isEmpty:
+            // 静默刷新后几乎不会进入；保留兜底，避免首刷空白。
+            ProgressView("同步中…")
+                .frame(maxWidth: .infinity, minHeight: 120)
+                .padding()
         default:
             if session.problems.isEmpty {
                 emptyState(title: "暂无未恢复问题", detail: "当前过滤条件下一切正常。")
@@ -77,7 +89,7 @@ struct ContentView: View {
             Button("刷新") {
                 Task { await session.refresh(reason: .manual) }
             }
-            .disabled(isSyncing)
+            .disabled(session.isRefreshInFlight)
             if session.canOpenZabbixFrontend {
                 Button("打开 Web") {
                     session.openZabbixFrontend()
@@ -89,40 +101,41 @@ struct ContentView: View {
         .padding(12)
     }
 
-    /// MenuBarExtra / LSUIElement 下直接 `openWindow` 常会静默失败，需先激活再打开并前置。
+    /// 弹层在 NSPopover 内，openWindow 环境不可靠；交给 AppDelegate / Settings 场景打开。
     private func openSettingsWindow() {
-        NSApp.activate(ignoringOtherApps: true)
-        if let existing = NSApp.windows.first(where: Self.isSettingsWindow) {
-            existing.makeKeyAndOrderFront(nil)
-            return
-        }
-        openWindow(id: "settings")
+        NotificationCenter.default.post(name: .sentrybooOpenSettings, object: nil)
         DispatchQueue.main.async {
-            NSApp.activate(ignoringOtherApps: true)
-            NSApp.windows.first(where: Self.isSettingsWindow)?.makeKeyAndOrderFront(nil)
+            AppDelegate.shared?.openSettingsWindow()
         }
     }
 
-    private static func isSettingsWindow(_ window: NSWindow) -> Bool {
-        if window.identifier?.rawValue == "settings" {
-            return true
-        }
-        return window.title == "Settings" || window.title == "设置"
+    private var showsRefreshPulse: Bool {
+        if isIdleUnconfigured { return false }
+        return session.isRefreshingPulse
     }
 
-    private var isSyncing: Bool {
-        if case .syncing = session.status { return true }
+    private var isIdleUnconfigured: Bool {
+        if case .idle = session.status { return session.accounts.isEmpty }
         return false
     }
 
+    private var status: SourceStatus { session.status }
+
     private var statusText: String {
         switch session.status {
-        case .idle:
+        case .idle where session.accounts.isEmpty:
             return "未配置数据源"
+        case .idle:
+            return "正在连接…"
         case .syncing:
-            return "正在同步…"
+            // 静默刷新后极少出现；若兜底触发，仍显示上一类连接文案感。
+            return "已连接"
         case .ok(let count):
             return count == 0 ? "已连接 · 无问题" : "已连接 · \(count) 条问题"
+        case .partial(let count, let failed):
+            let names = failed.joined(separator: "、")
+            let base = count == 0 ? "部分失败 · 无问题" : "部分失败 · \(count) 条问题"
+            return "\(base)：\(names)"
         case .error:
             return "连接异常"
         }
@@ -132,6 +145,8 @@ struct ContentView: View {
         switch session.status {
         case .error:
             return .red
+        case .partial:
+            return .orange
         default:
             return .secondary
         }
@@ -161,11 +176,38 @@ struct ContentView: View {
                         .controlSize(.small)
                 }
                 .padding(.top, 4)
+            } else if case .partial = session.status {
+                HStack(spacing: 8) {
+                    Button("重试") {
+                        Task { await session.refresh(reason: .manual) }
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    Button("打开设置") { openSettingsWindow() }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                }
+                .padding(.top, 4)
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(16)
         .frame(minHeight: 120)
+    }
+}
+
+private struct BreathingDot: View {
+    @State private var glowing = false
+
+    var body: some View {
+        Circle()
+            .fill(Color.green)
+            .frame(width: 7, height: 7)
+            .opacity(glowing ? 1.0 : 0.35)
+            .shadow(color: .green.opacity(glowing ? 0.7 : 0.15), radius: glowing ? 3 : 0)
+            .animation(.easeInOut(duration: 0.7).repeatForever(autoreverses: true), value: glowing)
+            .onAppear { glowing = true }
+            .accessibilityLabel("刚刚刷新")
     }
 }
 
@@ -180,6 +222,12 @@ private struct ProblemRow: View {
         } label: {
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
+                    Text(problem.sourceName)
+                        .font(.caption2.weight(.semibold))
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(Color.secondary.opacity(0.15))
+                        .clipShape(Capsule())
                     Text(problem.severity.displayName)
                         .font(.caption2.weight(.semibold))
                         .padding(.horizontal, 6)

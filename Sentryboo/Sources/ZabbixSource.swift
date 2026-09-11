@@ -4,8 +4,8 @@ import Foundation
 /// - 5.4+ API Token 走 JSON-RPC `auth` 字段（兼容旧版）
 /// - 同时附带 `Authorization: Bearer`（兼容 6.x+）
 struct ZabbixSource: AlertSource {
-    let id = "zabbix"
-    let displayName = "Zabbix"
+    let id: String
+    let displayName: String
     let baseURL: String
     let apiToken: String
     let minimumSeverity: AlertSeverity
@@ -13,12 +13,16 @@ struct ZabbixSource: AlertSource {
     private let session: URLSession
 
     init(
+        accountID: UUID,
+        displayName: String,
         baseURL: String,
         apiToken: String,
         minimumSeverity: AlertSeverity = .notClassified,
         allowInsecureTLS: Bool = false,
         session: URLSession? = nil
     ) {
+        self.id = accountID.uuidString
+        self.displayName = displayName
         self.baseURL = baseURL
         self.apiToken = apiToken
         self.minimumSeverity = minimumSeverity
@@ -36,12 +40,17 @@ struct ZabbixSource: AlertSource {
     }
 
     func fetchOpenProblems() async throws -> [AlertProblem] {
+        // 对齐 Zabbix 5.4「监视 → 问题 → 最近问题」默认过滤：
+        // - recent=true：未恢复 + 近期刚恢复（OK 显示时长内）
+        // - suppressed=false：排除维护/抑制问题（前端默认不勾选「显示被抑制的问题」）
+        // - sortfield 仅允许 eventid；severity 排序在客户端完成。
         let response: ProblemGetResponse = try await post(
             method: "problem.get",
             params: ProblemGetParams(
-                output: ["eventid", "objectid", "name", "severity", "clock", "acknowledged"],
+                output: ["eventid", "objectid", "name", "severity", "clock", "acknowledged", "r_eventid", "suppressed"],
                 recent: true,
-                sortfield: ["severity", "eventid"],
+                suppressed: false,
+                sortfield: ["eventid"],
                 sortorder: "DESC",
                 selectHosts: ["host", "name"],
                 severities: Self.severities(from: minimumSeverity)
@@ -49,29 +58,35 @@ struct ZabbixSource: AlertSource {
             auth: .token(apiToken)
         )
 
-        return response.result.map { item in
-            let hostName = item.hosts?.first?.name
-                ?? item.hosts?.first?.host
-                ?? "未知主机"
-            let clock = Double(item.clock ?? "0") ?? 0
-            let severity = AlertSeverity(rawValue: Int(item.severity ?? "0") ?? 0) ?? .notClassified
-            return AlertProblem(
-                id: item.eventid,
-                title: item.name ?? "(无标题)",
-                host: hostName,
-                severity: severity,
-                startedAt: Date(timeIntervalSince1970: clock),
-                url: Self.problemWebURL(baseURL: baseURL, eventID: item.eventid, triggerID: item.objectid),
-                acknowledged: item.acknowledged == "1"
-            )
-        }
-        .filter { $0.severity >= minimumSeverity }
-        .sorted { lhs, rhs in
-            if lhs.severity != rhs.severity {
-                return lhs.severity > rhs.severity
+        return response.result
+            // 前端问题页不会展示无主机/已删除主机的残留问题。
+            .compactMap { item -> AlertProblem? in
+                let hostName = item.hosts?
+                    .compactMap { $0.name?.nilIfEmpty ?? $0.host?.nilIfEmpty }
+                    .first
+                guard let hostName else { return nil }
+
+                let clock = Double(item.clock ?? "0") ?? 0
+                let severity = AlertSeverity(rawValue: Int(item.severity ?? "0") ?? 0) ?? .notClassified
+                return AlertProblem(
+                    id: "\(id):\(item.eventid)",
+                    title: item.name ?? "(无标题)",
+                    host: hostName,
+                    severity: severity,
+                    startedAt: Date(timeIntervalSince1970: clock),
+                    url: Self.problemWebURL(baseURL: baseURL, eventID: item.eventid, triggerID: item.objectid),
+                    acknowledged: item.acknowledged == "1",
+                    sourceID: id,
+                    sourceName: displayName
+                )
             }
-            return lhs.startedAt > rhs.startedAt
-        }
+            .filter { $0.severity >= minimumSeverity }
+            .sorted { lhs, rhs in
+                if lhs.severity != rhs.severity {
+                    return lhs.severity > rhs.severity
+                }
+                return lhs.startedAt > rhs.startedAt
+            }
     }
 
     /// 打开 Zabbix 前端问题页（兼容常见路径）。
@@ -126,15 +141,22 @@ struct ZabbixSource: AlertSource {
         }
 
         let envelope = JSONRPCRequest(method: method, params: params, auth: auth)
-        request.httpBody = try JSONEncoder().encode(envelope)
+        let bodyData = try JSONEncoder().encode(envelope)
+        request.httpBody = bodyData
+        await Self.debugRequest(method: method, url: url.absoluteString, bodyData: bodyData)
 
         let data: Data
         let httpResponse: URLResponse
         do {
             (data, httpResponse) = try await session.data(for: request)
         } catch {
-            throw Self.mapTransportError(error)
+            let mapped = Self.mapTransportError(error)
+            await Self.debugError("\(method) 传输失败：\(mapped.localizedDescription)")
+            throw mapped
         }
+
+        let statusCode = (httpResponse as? HTTPURLResponse)?.statusCode
+        await Self.debugResponse(method: method, statusCode: statusCode, bodyData: data)
 
         if let http = httpResponse as? HTTPURLResponse {
             if http.statusCode == 401 || http.statusCode == 403 {
@@ -166,6 +188,23 @@ struct ZabbixSource: AlertSource {
             }
             throw SourceError.server("无法解析响应：\(preview)")
         }
+    }
+
+    @MainActor
+    private static func debugRequest(method: String, url: String, bodyData: Data) {
+        let body = String(data: bodyData, encoding: .utf8) ?? "<binary \(bodyData.count) bytes>"
+        DebugLog.shared.request(method: method, url: url, body: body)
+    }
+
+    @MainActor
+    private static func debugResponse(method: String, statusCode: Int?, bodyData: Data) {
+        let body = responsePreview(bodyData, limit: 4000)
+        DebugLog.shared.response(method: method, statusCode: statusCode, body: body)
+    }
+
+    @MainActor
+    private static func debugError(_ message: String) {
+        DebugLog.shared.error(message)
     }
 
     private func apiURL() throws -> URL {
@@ -296,6 +335,7 @@ private struct APIInfoVersionResponse: Decodable {
 private struct ProblemGetParams: Encodable {
     let output: [String]
     let recent: Bool
+    let suppressed: Bool
     let sortfield: [String]
     let sortorder: String
     let selectHosts: [String]
@@ -313,10 +353,24 @@ private struct ProblemDTO: Decodable {
     let severity: String?
     let clock: String?
     let acknowledged: String?
+    let rEventID: String?
+    let suppressed: String?
     let hosts: [HostDTO]?
+
+    enum CodingKeys: String, CodingKey {
+        case eventid, objectid, name, severity, clock, acknowledged, hosts, suppressed
+        case rEventID = "r_eventid"
+    }
 }
 
 private struct HostDTO: Decodable {
     let host: String?
     let name: String?
+}
+
+private extension String {
+    var nilIfEmpty: String? {
+        let trimmed = trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? nil : trimmed
+    }
 }

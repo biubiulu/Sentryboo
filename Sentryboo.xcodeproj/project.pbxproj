@@ -12,10 +12,13 @@
 		96C223AACFA446D68EEAA506 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC82E02D31B94ED9996F6488 /* SettingsView.swift */; };
 		03E7A33FC177484DA1C7C80B /* AlertSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE13C1114B64C509A6C3024 /* AlertSession.swift */; };
 		C55A81AB275244BBA3099DE4 /* AlertModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5E8909FA8844A79724D446 /* AlertModels.swift */; };
+		E7F8A9B0C1D24E33F4A5B6C7 /* ZabbixAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6E7F8A9B0C14D22E3F4A5B6 /* ZabbixAccount.swift */; };
 		313039A1ADCB4202A4FABBC2 /* AlertSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC0970AC6FF45D29DE5A0CB /* AlertSource.swift */; };
 		F3A7D42159004433A5145340 /* ZabbixSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA32CF113384AD9923A6C41 /* ZabbixSource.swift */; };
-		63FDDA84B1D94DDE956A2EFF /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE0F00879674667A45C1024 /* KeychainStore.swift */; };
+		63FDDA84B1D94DDE956A2EFF /* TokenStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE0F00879674667A45C1024 /* TokenStore.swift */; };
 		A1B2C3D4E5F6478890ABCDEF /* InsecureTLSDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A6478890BCDEF0 /* InsecureTLSDelegate.swift */; };
+		D4E5F6A7B8C94011AABBCCDD /* DebugLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D4E5F6A7B8402299AABBCC /* DebugLog.swift */; };
+		F1A2B3C4D5E6478890ABCDEF /* MenuBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A2B3C4D5E6478890ABCDEF /* MenuBarController.swift */; };
 		8F9BF99229654D45A99B461A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D3E70CF7F8C47D694E7B459 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
@@ -26,10 +29,13 @@
 		DC82E02D31B94ED9996F6488 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		2BE13C1114B64C509A6C3024 /* AlertSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSession.swift; sourceTree = "<group>"; };
 		EC5E8909FA8844A79724D446 /* AlertModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModels.swift; sourceTree = "<group>"; };
+		D6E7F8A9B0C14D22E3F4A5B6 /* ZabbixAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZabbixAccount.swift; sourceTree = "<group>"; };
 		2EC0970AC6FF45D29DE5A0CB /* AlertSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSource.swift; sourceTree = "<group>"; };
 		7DA32CF113384AD9923A6C41 /* ZabbixSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZabbixSource.swift; sourceTree = "<group>"; };
-		AAE0F00879674667A45C1024 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
+		AAE0F00879674667A45C1024 /* TokenStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenStore.swift; sourceTree = "<group>"; };
 		B1C2D3E4F5A6478890BCDEF0 /* InsecureTLSDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsecureTLSDelegate.swift; sourceTree = "<group>"; };
+		C3D4E5F6A7B8402299AABBCC /* DebugLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLog.swift; sourceTree = "<group>"; };
+		E1A2B3C4D5E6478890ABCDEF /* MenuBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuBarController.swift; sourceTree = "<group>"; };
 		2D3E70CF7F8C47D694E7B459 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -64,6 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				B85D246F11C44411A596E6C7 /* SentrybooApp.swift */,
+				E1A2B3C4D5E6478890ABCDEF /* MenuBarController.swift */,
 				4397977C37654409A4305A48 /* ContentView.swift */,
 				DC82E02D31B94ED9996F6488 /* SettingsView.swift */,
 				2BE13C1114B64C509A6C3024 /* AlertSession.swift */,
@@ -79,6 +86,7 @@
 			isa = PBXGroup;
 			children = (
 				EC5E8909FA8844A79724D446 /* AlertModels.swift */,
+				D6E7F8A9B0C14D22E3F4A5B6 /* ZabbixAccount.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -95,8 +103,9 @@
 		BF3F1C55367A402DB9B80151 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				AAE0F00879674667A45C1024 /* KeychainStore.swift */,
+				AAE0F00879674667A45C1024 /* TokenStore.swift */,
 				B1C2D3E4F5A6478890BCDEF0 /* InsecureTLSDelegate.swift */,
+				C3D4E5F6A7B8402299AABBCC /* DebugLog.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -167,14 +176,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E0EEE091B5844209B0EEECD /* SentrybooApp.swift in Sources */,
+				F1A2B3C4D5E6478890ABCDEF /* MenuBarController.swift in Sources */,
 				452F59D9ADEB406FB85F7C59 /* ContentView.swift in Sources */,
 				96C223AACFA446D68EEAA506 /* SettingsView.swift in Sources */,
 				03E7A33FC177484DA1C7C80B /* AlertSession.swift in Sources */,
 				C55A81AB275244BBA3099DE4 /* AlertModels.swift in Sources */,
+				E7F8A9B0C1D24E33F4A5B6C7 /* ZabbixAccount.swift in Sources */,
 				313039A1ADCB4202A4FABBC2 /* AlertSource.swift in Sources */,
 				F3A7D42159004433A5145340 /* ZabbixSource.swift in Sources */,
-				63FDDA84B1D94DDE956A2EFF /* KeychainStore.swift in Sources */,
+				63FDDA84B1D94DDE956A2EFF /* TokenStore.swift in Sources */,
 				A1B2C3D4E5F6478890ABCDEF /* InsecureTLSDelegate.swift in Sources */,
+				D4E5F6A7B8C94011AABBCCDD /* DebugLog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
