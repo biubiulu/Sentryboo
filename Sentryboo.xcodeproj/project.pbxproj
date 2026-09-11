@@ -1,0 +1,291 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		1E0EEE091B5844209B0EEECD /* SentrybooApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = B85D246F11C44411A596E6C7 /* SentrybooApp.swift */; };
+		452F59D9ADEB406FB85F7C59 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4397977C37654409A4305A48 /* ContentView.swift */; };
+		96C223AACFA446D68EEAA506 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC82E02D31B94ED9996F6488 /* SettingsView.swift */; };
+		03E7A33FC177484DA1C7C80B /* AlertSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2BE13C1114B64C509A6C3024 /* AlertSession.swift */; };
+		C55A81AB275244BBA3099DE4 /* AlertModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5E8909FA8844A79724D446 /* AlertModels.swift */; };
+		313039A1ADCB4202A4FABBC2 /* AlertSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2EC0970AC6FF45D29DE5A0CB /* AlertSource.swift */; };
+		F3A7D42159004433A5145340 /* ZabbixSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DA32CF113384AD9923A6C41 /* ZabbixSource.swift */; };
+		63FDDA84B1D94DDE956A2EFF /* KeychainStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE0F00879674667A45C1024 /* KeychainStore.swift */; };
+		A1B2C3D4E5F6478890ABCDEF /* InsecureTLSDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B1C2D3E4F5A6478890BCDEF0 /* InsecureTLSDelegate.swift */; };
+		8F9BF99229654D45A99B461A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D3E70CF7F8C47D694E7B459 /* Assets.xcassets */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		A3065F380C0149A99A2347DF /* Sentryboo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sentryboo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B85D246F11C44411A596E6C7 /* SentrybooApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SentrybooApp.swift; sourceTree = "<group>"; };
+		4397977C37654409A4305A48 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		DC82E02D31B94ED9996F6488 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		2BE13C1114B64C509A6C3024 /* AlertSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSession.swift; sourceTree = "<group>"; };
+		EC5E8909FA8844A79724D446 /* AlertModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertModels.swift; sourceTree = "<group>"; };
+		2EC0970AC6FF45D29DE5A0CB /* AlertSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertSource.swift; sourceTree = "<group>"; };
+		7DA32CF113384AD9923A6C41 /* ZabbixSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZabbixSource.swift; sourceTree = "<group>"; };
+		AAE0F00879674667A45C1024 /* KeychainStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStore.swift; sourceTree = "<group>"; };
+		B1C2D3E4F5A6478890BCDEF0 /* InsecureTLSDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsecureTLSDelegate.swift; sourceTree = "<group>"; };
+		2D3E70CF7F8C47D694E7B459 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		7655F1B10AFB49FE86182B6B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		B9BBB59C15754080BE61AC9A = {
+			isa = PBXGroup;
+			children = (
+				DB4144A85E7C41CEB83726F8 /* Sentryboo */,
+				BD9CBB7DB67B415B84AC448C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		BD9CBB7DB67B415B84AC448C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A3065F380C0149A99A2347DF /* Sentryboo.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		DB4144A85E7C41CEB83726F8 /* Sentryboo */ = {
+			isa = PBXGroup;
+			children = (
+				B85D246F11C44411A596E6C7 /* SentrybooApp.swift */,
+				4397977C37654409A4305A48 /* ContentView.swift */,
+				DC82E02D31B94ED9996F6488 /* SettingsView.swift */,
+				2BE13C1114B64C509A6C3024 /* AlertSession.swift */,
+				86D5F86A1C2D47999AFD6A0F /* Models */,
+				0E512C00B80A414FBE797B4E /* Sources */,
+				BF3F1C55367A402DB9B80151 /* Services */,
+				2D3E70CF7F8C47D694E7B459 /* Assets.xcassets */,
+			);
+			path = Sentryboo;
+			sourceTree = "<group>";
+		};
+		86D5F86A1C2D47999AFD6A0F /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				EC5E8909FA8844A79724D446 /* AlertModels.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		0E512C00B80A414FBE797B4E /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				2EC0970AC6FF45D29DE5A0CB /* AlertSource.swift */,
+				7DA32CF113384AD9923A6C41 /* ZabbixSource.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		BF3F1C55367A402DB9B80151 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				AAE0F00879674667A45C1024 /* KeychainStore.swift */,
+				B1C2D3E4F5A6478890BCDEF0 /* InsecureTLSDelegate.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		DAF61C5CFF23497BA038EFF9 /* Sentryboo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7EABC9DD91E405AA978AFD0 /* Build configuration list for PBXNativeTarget "Sentryboo" */;
+			buildPhases = (
+				8A091CDA50764FB0854786C7 /* Sources */,
+				7655F1B10AFB49FE86182B6B /* Frameworks */,
+				370A5F06DCAA4D258A6B38F9 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Sentryboo;
+			productName = Sentryboo;
+			productReference = A3065F380C0149A99A2347DF /* Sentryboo.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		09634E82C84144D69AFE486C /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = D6EFA932FFBC4775A1EAF304 /* Build configuration list for PBXProject "Sentryboo" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+				"zh-Hans",
+			);
+			mainGroup = B9BBB59C15754080BE61AC9A;
+			productRefGroup = BD9CBB7DB67B415B84AC448C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				DAF61C5CFF23497BA038EFF9 /* Sentryboo */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		370A5F06DCAA4D258A6B38F9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8F9BF99229654D45A99B461A /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		8A091CDA50764FB0854786C7 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1E0EEE091B5844209B0EEECD /* SentrybooApp.swift in Sources */,
+				452F59D9ADEB406FB85F7C59 /* ContentView.swift in Sources */,
+				96C223AACFA446D68EEAA506 /* SettingsView.swift in Sources */,
+				03E7A33FC177484DA1C7C80B /* AlertSession.swift in Sources */,
+				C55A81AB275244BBA3099DE4 /* AlertModels.swift in Sources */,
+				313039A1ADCB4202A4FABBC2 /* AlertSource.swift in Sources */,
+				F3A7D42159004433A5145340 /* ZabbixSource.swift in Sources */,
+				63FDDA84B1D94DDE956A2EFF /* KeychainStore.swift in Sources */,
+				A1B2C3D4E5F6478890ABCDEF /* InsecureTLSDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		44C800B08D2143C0BC6C6593 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		CFB708CC3E90413182D710F8 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		E845995D6AD94069AE49CC13 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.sentryboo.Sentryboo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		9946A4F9A6CF46B28DF75B48 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_LSUIElement = YES;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 0.1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = app.sentryboo.Sentryboo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D6EFA932FFBC4775A1EAF304 /* Build configuration list for PBXProject "Sentryboo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				44C800B08D2143C0BC6C6593 /* Debug */,
+				CFB708CC3E90413182D710F8 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7EABC9DD91E405AA978AFD0 /* Build configuration list for PBXNativeTarget "Sentryboo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E845995D6AD94069AE49CC13 /* Debug */,
+				9946A4F9A6CF46B28DF75B48 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 09634E82C84144D69AFE486C /* Project object */;
+}
